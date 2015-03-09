@@ -10,38 +10,30 @@
 
 @implementation BackendProxy
 
-- (NSDictionary *)jsonTapped:(NSString *)algo
-{
-    // 1
-    NSString *string = [NSString stringWithFormat:@"%@weather.php?format=json", BaseURLString];
-    NSURL *url = [NSURL URLWithString:string];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
++ (void)loginWithUserID:(NSString *)userID AndPassword:(NSString *)password completion:(void (^)(NSDictionary *json, BOOL success))completion{
     
-    // 2
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSString *apiRequestString = [NSString stringWithFormat:@"%@/login", apiBase];
+    NSDictionary *parameters = @{
+                                 @"email" : userID,
+                                 @"password" : password,
+                                 };
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:apiRequestString parameters:parameters success:^(AFHTTPRequestOperation *operation, id jsonObject)
+     {
+         NSLog(@"Success: %@", jsonObject);
+         
+         NSDictionary *jsonDictionary = (NSDictionary *)jsonObject;
+         
+         if (completion)
+             completion(jsonDictionary, YES);
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"%@ AFError: %@", self.class, [error localizedDescription]);
+         
+         completion(nil, NO);
+     }];
     
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // 3
-        self.weather = (NSDictionary *)responseObject;
-        self.title = @"JSON Retrieved";
-        [self.tableView reloadData];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        // 4
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
-                                                            message:[error localizedDescription]
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-    // 5
-    [operation start];
 }
-
 
 @end

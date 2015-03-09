@@ -40,6 +40,14 @@
                 self.errorLabel.hidden=false;
             }else{
                //TODO: parsear JSON
+                NSDictionary *user = [json objectForKey:@"user"];
+                NSString *ident = [user objectForKey:@"id"];
+                NSString *token = [user objectForKey:@"session_token"];
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                
+                [defaults setObject:ident forKey:@"ident"];
+                [defaults setObject:token forKey:@"token"];
+                
                [self performSegueWithIdentifier:@"TabBar" sender:sender];
             }
         }];

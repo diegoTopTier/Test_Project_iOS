@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9B3AE4D61AADD9A200A9207A /* Tweet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3AE4D51AADD9A200A9207A /* Tweet.m */; };
+		9B3AE4DA1AADF61200A9207A /* TweetsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B3AE4D91AADF61200A9207A /* TweetsTableCell.xib */; };
+		9B3AE4DD1AADFF7100A9207A /* TweetsTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3AE4DC1AADFF7100A9207A /* TweetsTableCell.m */; };
+		9B3AE4E01AAE1F8D00A9207A /* Tweet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3AE4DF1AAE1F8D00A9207A /* Tweet.m */; };
 		9B6769F41AA77ACC001757C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B6769F31AA77ACC001757C3 /* main.m */; };
 		9B6769F71AA77ACC001757C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B6769F61AA77ACC001757C3 /* AppDelegate.m */; };
 		9B6769FA1AA77ACC001757C3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B6769F91AA77ACC001757C3 /* ViewController.m */; };
@@ -32,8 +34,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9B3AE4D41AADD9A200A9207A /* Tweet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tweet.h; sourceTree = "<group>"; };
-		9B3AE4D51AADD9A200A9207A /* Tweet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tweet.m; sourceTree = "<group>"; };
+		9B3AE4D91AADF61200A9207A /* TweetsTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetsTableCell.xib; sourceTree = "<group>"; };
+		9B3AE4DB1AADFF7100A9207A /* TweetsTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetsTableCell.h; sourceTree = "<group>"; };
+		9B3AE4DC1AADFF7100A9207A /* TweetsTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetsTableCell.m; sourceTree = "<group>"; };
+		9B3AE4DE1AAE1F8D00A9207A /* Tweet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tweet.h; sourceTree = "<group>"; };
+		9B3AE4DF1AAE1F8D00A9207A /* Tweet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tweet.m; sourceTree = "<group>"; };
 		9B6769EE1AA77ACC001757C3 /* Test_Project_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test_Project_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6769F21AA77ACC001757C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B6769F31AA77ACC001757C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -94,13 +99,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		9B3AE4D71AADD9A800A9207A /* Clases */ = {
+		9B3AE4D81AADF59500A9207A /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				9B3AE4D41AADD9A200A9207A /* Tweet.h */,
-				9B3AE4D51AADD9A200A9207A /* Tweet.m */,
+				9B3AE4D91AADF61200A9207A /* TweetsTableCell.xib */,
+				9B3AE4DB1AADFF7100A9207A /* TweetsTableCell.h */,
+				9B3AE4DC1AADFF7100A9207A /* TweetsTableCell.m */,
 			);
-			name = Clases;
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		9B3AE4E11AAE1F9100A9207A /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				9B3AE4DE1AAE1F8D00A9207A /* Tweet.h */,
+				9B3AE4DF1AAE1F8D00A9207A /* Tweet.m */,
+			);
+			name = Object;
 			sourceTree = "<group>";
 		};
 		9B6769E51AA77ACC001757C3 = {
@@ -126,7 +141,8 @@
 		9B6769F01AA77ACC001757C3 /* Test_Project_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				9B3AE4D71AADD9A800A9207A /* Clases */,
+				9B3AE4E11AAE1F9100A9207A /* Object */,
+				9B3AE4D81AADF59500A9207A /* Cell */,
 				9B922E9A1AA8B71E000408A7 /* ViewControllers */,
 				9B922E991AA8B713000408A7 /* Proxy */,
 				9B6769F51AA77ACC001757C3 /* AppDelegate.h */,
@@ -269,6 +285,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B3AE4DA1AADF61200A9207A /* TweetsTableCell.xib in Resources */,
 				9B6769FD1AA77ACC001757C3 /* Main.storyboard in Resources */,
 				9B676A021AA77ACC001757C3 /* LaunchScreen.xib in Resources */,
 				9B6769FF1AA77ACC001757C3 /* Images.xcassets in Resources */,
@@ -325,9 +342,10 @@
 				9B6769FA1AA77ACC001757C3 /* ViewController.m in Sources */,
 				9B6769F71AA77ACC001757C3 /* AppDelegate.m in Sources */,
 				9B7B4BD21AA9E6F100BE0912 /* TweetsViewController.m in Sources */,
-				9B3AE4D61AADD9A200A9207A /* Tweet.m in Sources */,
+				9B3AE4E01AAE1F8D00A9207A /* Tweet.m in Sources */,
 				9B6769F41AA77ACC001757C3 /* main.m in Sources */,
 				9B922E951AA8A87B000408A7 /* BackendProxy.m in Sources */,
+				9B3AE4DD1AADFF7100A9207A /* TweetsTableCell.m in Sources */,
 				9B922E981AA8B708000408A7 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,7 +10,7 @@
 
 @interface Tweet : NSObject
 
-@property (nonatomic, copy) NSString *userName;
-@property (nonatomic, copy) NSString *dscTweet;
+@property (nonatomic,copy) NSString *userName;
+@property (nonatomic,copy) NSString *dscTweet;
 
 @end

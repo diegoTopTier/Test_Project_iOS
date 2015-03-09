@@ -39,7 +39,6 @@
                 self.errorLabel.text=@"Connection error";
                 self.errorLabel.hidden=false;
             }else{
-               //TODO: parsear JSON
                 NSDictionary *user = [json objectForKey:@"user"];
                 NSString *ident = [user objectForKey:@"id"];
                 NSString *token = [user objectForKey:@"session_token"];

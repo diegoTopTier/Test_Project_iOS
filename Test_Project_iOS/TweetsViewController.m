@@ -7,6 +7,9 @@
 //
 
 #import "TweetsViewController.h"
+#import "TweetsTableCell.h"
+#import "BackendProxy.h"
+#import "Tweet.h"
 
 @interface TweetsViewController ()
 
@@ -16,6 +19,48 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    spinner.center = self.tableView.center; //set some center
+    [self.tableView addSubview: spinner];
+    [self.tableView bringSubviewToFront:spinner];
+    spinner.hidesWhenStopped = YES;
+    spinner.hidden = NO;
+    [spinner startAnimating];
+    
+    
+    [BackendProxy getTweetsWithCompletion:^(NSDictionary *json, BOOL success) {
+        [spinner stopAnimating];
+        if (!success){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Error while loading tweets" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+        }else{
+            
+            NSMutableArray *tweets = [json objectForKey:@"tweets"];
+            self.tweets=[[NSMutableArray alloc] initWithCapacity:[tweets count]];
+            for(NSDictionary* object in tweets){
+                NSString *text = [object objectForKey:@"text"];
+                NSDictionary *user = [object objectForKey:@"user"];
+                NSString *firstName=[user objectForKey:@"first_name"];
+                NSString *lastName=[user objectForKey:@"last_name"];
+                NSDictionary *tweet = @{
+                                        @"full_name" : [NSString stringWithFormat:@"%@ %@",firstName,lastName],
+                                        @"text" : text,
+                                             };
+                [self.tweets addObject:tweet];
+
+            }
+            [self.tableView reloadData];
+//            NSString *ident = [user objectForKey:@"id"];
+//            NSString *token = [user objectForKey:@"session_token"];
+//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//            
+//            [defaults setObject:ident forKey:@"ident"];
+//            [defaults setObject:token forKey:@"token"];
+//            
+//            [self performSegueWithIdentifier:@"TabBar" sender:sender];
+        }
+    }];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -32,29 +77,42 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
+
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
+
     // Return the number of rows in the section.
     return [self.tweets count];
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+
+    static NSString *tweetsTableIdentifier = @"TweetsTableCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PlayerCell"];
+    TweetsTableCell *cell = (TweetsTableCell *)[tableView dequeueReusableCellWithIdentifier:tweetsTableIdentifier];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"TweetsTableCell" owner:self options:nil];
+        cell = [nib objectAtIndex:0];
+    }
     
-    Player *player = (self.players)[indexPath.row];
-    cell.textLabel.text = player.name;
-    cell.detailTextLabel.text = player.game;
+    cell.nameLabel.text =  [(self.tweets)[indexPath.row] objectForKey:@"full_name"];
+    cell.dscTweetLabel.text =  [(self.tweets)[indexPath.row] objectForKey:@"text"];
+    cell.profileImageView.image = [UIImage imageNamed:@"homero"];
     
     return cell;
+ 
+}
+
+/*- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 78.0;
 }*/
+
+
 
 
 /*

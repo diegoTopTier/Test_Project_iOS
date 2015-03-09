@@ -15,6 +15,7 @@ static NSString * const apiBase = @"http://192.168.1.163:3000/api/v1";
 
 
 + (void)loginWithUserID:(NSString *)userID AndPassword:(NSString *)password completion:(void (^)(NSDictionary *json, BOOL success))completion;
++ (void)getTweetsWithCompletion:(void (^)(NSDictionary *json, BOOL success))completion;
 
 
 @end

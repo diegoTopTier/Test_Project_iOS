@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AFNetworking.h"
+#import <AFNetworking/AFNetworking.h>
+
+static NSString * const apiBase = @"http://192.168.1.163:3000/api/v1";
 
 @interface BackendProxy : NSObject
 
-static NSString * const BaseURLString = @"http://www.raywenderlich.com/demos/weather_sample/";//poner url donde este la api
-- (NSDictionary *)jsonTapped:(NSString *)algo;
+
++ (void)loginWithUserID:(NSString *)userID AndPassword:(NSString *)password completion:(void (^)(NSDictionary *json, BOOL success))completion;
+
 
 @end

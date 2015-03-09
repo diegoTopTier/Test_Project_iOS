@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *ident = [defaults objectForKey:@"ident"];
+    if (ident!=nil){
+        UINavigationController *root = (UINavigationController*)self.window.rootViewController;
+        LoginViewController *loginViewController = (LoginViewController*)(root.viewControllers[0]);
+        
+        [loginViewController performSegueWithIdentifier:@"TabBar" sender:nil];
+    }
     return YES;
 }
 

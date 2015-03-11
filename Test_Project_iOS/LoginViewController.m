@@ -43,6 +43,7 @@
                 NSString *ident = [user objectForKey:@"id"];
                 NSString *token = [user objectForKey:@"session_token"];
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSLog(@"TOKEN: %@",token);
                 
                 [defaults setObject:ident forKey:@"ident"];
                 [defaults setObject:token forKey:@"token"];

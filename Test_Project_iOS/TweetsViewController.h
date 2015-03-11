@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TweetDetailViewController.h"
 
 
-@interface TweetsViewController : UITableViewController
+@interface TweetsViewController : UITableViewController <TweetDetailViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *tweets;
+
+
 
 @end

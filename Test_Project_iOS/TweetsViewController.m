@@ -9,7 +9,7 @@
 #import "TweetsViewController.h"
 #import "TweetsTableCell.h"
 #import "BackendProxy.h"
-#import "Tweet.h"
+
 
 @interface TweetsViewController ()
 
@@ -39,34 +39,37 @@
             NSMutableArray *tweets = [json objectForKey:@"tweets"];
             self.tweets=[[NSMutableArray alloc] initWithCapacity:[tweets count]];
             for(NSDictionary* object in tweets){
+                NSNumber *idTweet=[object objectForKey:@"id"];
+                NSNumber *likeByMe= [object objectForKey:@"like_by_me"];
                 NSString *text = [object objectForKey:@"text"];
                 NSDictionary *user = [object objectForKey:@"user"];
                 NSString *firstName=[user objectForKey:@"first_name"];
                 NSString *lastName=[user objectForKey:@"last_name"];
-                NSDictionary *tweet = @{
-                                        @"full_name" : [NSString stringWithFormat:@"%@ %@",firstName,lastName],
-                                        @"text" : text,
-                                             };
+                NSMutableDictionary *tweet=[[NSMutableDictionary alloc] init];
+                [tweet setObject:[NSString stringWithFormat:@"%@ %@",firstName,lastName] forKey:@"full_name"];
+                [tweet setObject:text forKey:@"text"];
+                [tweet setObject:idTweet forKey:@"idTweet"];
+                [tweet setObject:likeByMe forKey:@"likeByMe"];
+                
                 [self.tweets addObject:tweet];
 
             }
             [self.tableView reloadData];
-//            NSString *ident = [user objectForKey:@"id"];
-//            NSString *token = [user objectForKey:@"session_token"];
-//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//            
-//            [defaults setObject:ident forKey:@"ident"];
-//            [defaults setObject:token forKey:@"token"];
-//            
-//            [self performSegueWithIdentifier:@"TabBar" sender:sender];
         }
     }];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    // Initialize the refresh control.
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor whiteColor];
+    self.refreshControl.tintColor = [UIColor blackColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(renewTweets)
+                  forControlEvents:UIControlEventValueChanged];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,6 +110,87 @@
     return cell;
  
 }
+
+//porque cuando selecciono por primera vez no me logea?
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self performSegueWithIdentifier:@"TweetDetail" sender:indexPath];
+}
+
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"TweetDetail"]) {
+        
+        NSIndexPath *senderIndexPath=(NSIndexPath *)sender;
+        TweetDetailViewController *tweetDetailViewController = segue.destinationViewController;
+        tweetDetailViewController.name= [self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"full_name"];
+        tweetDetailViewController.dscTweet = [self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"text"];
+        tweetDetailViewController.profileImage= [UIImage imageNamed:@"homero"];
+        tweetDetailViewController.likeByMe=[self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"likeByMe"];
+        tweetDetailViewController.idTweet=[self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"idTweet"];
+        tweetDetailViewController.delegate = self;
+        
+    }
+    
+};
+
+#pragma mark - TweetsDetailsViewControllerDelegate
+
+-(void) changedLike:(NSNumber *)like forTweet:(NSNumber *) idTweet{
+//TODO
+    NSEnumerator *enumerator = [self.tweets objectEnumerator];
+    NSNumber *actualTweet;
+    id object;
+    while (object = [enumerator nextObject]) {
+        actualTweet=object[@"idTweet"];
+        if ([actualTweet isEqualToValue:idTweet]){
+            [object setObject:like forKey:@"likeByMe"];
+            break;
+        };
+    }
+}
+
+-(void) renewTweets{
+    
+
+
+    
+    [BackendProxy getTweetsWithCompletion:^(NSDictionary *json, BOOL success) {
+
+        if (!success){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Error while loading tweets" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+        }else{
+            NSMutableArray *tweets = [json objectForKey:@"tweets"];
+            self.tweets=[[NSMutableArray alloc] initWithCapacity:[tweets count]];
+            for(NSDictionary* object in tweets){
+                NSNumber *idTweet=[object objectForKey:@"id"];
+                NSNumber *likeByMe= [object objectForKey:@"like_by_me"];
+                NSString *text = [object objectForKey:@"text"];
+                NSDictionary *user = [object objectForKey:@"user"];
+                NSString *firstName=[user objectForKey:@"first_name"];
+                NSString *lastName=[user objectForKey:@"last_name"];
+                NSMutableDictionary *tweet=[[NSMutableDictionary alloc] init];
+                [tweet setObject:[NSString stringWithFormat:@"%@ %@",firstName,lastName] forKey:@"full_name"];
+                [tweet setObject:text forKey:@"text"];
+                [tweet setObject:idTweet forKey:@"idTweet"];
+                [tweet setObject:likeByMe forKey:@"likeByMe"];
+                
+                [self.tweets addObject:tweet];
+            
+            }
+            [self.refreshControl endRefreshing];
+
+            [self.tableView reloadData];
+        }
+    }];
+    
+}
+
+
+
 
 /*- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 78.0;
@@ -149,14 +233,5 @@
 }
 */
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

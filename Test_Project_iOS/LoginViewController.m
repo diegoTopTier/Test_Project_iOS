@@ -56,6 +56,12 @@
     
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.nameField endEditing:YES];
+    [self.passField endEditing:YES];
+}
+
+
 /*
 #pragma mark - Navigation
 

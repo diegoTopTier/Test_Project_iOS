@@ -43,6 +43,7 @@
                 NSNumber *likeByMe= [object objectForKey:@"like_by_me"];
                 NSString *text = [object objectForKey:@"text"];
                 NSDictionary *user = [object objectForKey:@"user"];
+                NSString *urlImg = [[user objectForKey:@"avatar"] objectForKey:@"url"];
                 NSString *firstName=[user objectForKey:@"first_name"];
                 NSString *lastName=[user objectForKey:@"last_name"];
                 NSMutableDictionary *tweet=[[NSMutableDictionary alloc] init];
@@ -50,6 +51,7 @@
                 [tweet setObject:text forKey:@"text"];
                 [tweet setObject:idTweet forKey:@"idTweet"];
                 [tweet setObject:likeByMe forKey:@"likeByMe"];
+                [tweet setObject:urlImg forKey:@"img"];
                 
                 [self.tweets addObject:tweet];
 
@@ -105,8 +107,26 @@
     
     cell.nameLabel.text =  [(self.tweets)[indexPath.row] objectForKey:@"full_name"];
     cell.dscTweetLabel.text =  [(self.tweets)[indexPath.row] objectForKey:@"text"];
-    cell.profileImageView.image = [UIImage imageNamed:@"homero"];
+    NSString * urlImgString=[(self.tweets)[indexPath.row] objectForKey:@"img"];
     
+    if (urlImgString == nil || [urlImgString isEqual:[NSNull null]]){
+        cell.profileImageView.image=[UIImage imageNamed:@"homero"];
+    }else{
+        cell.profileImageView.image = [UIImage imageWithData:
+                        [NSData dataWithContentsOfURL:
+                         [NSURL URLWithString: [NSString stringWithFormat:@"http://192.168.1.163:3000/%@",urlImgString]]]];
+    }
+//    NSString *imgPrueba=@"http://192.168.1.163:3000/uploads/user/avatar/10/Ned-flanders.jpg";
+//    NSURL *url = [NSURL URLWithString:imgPrueba];
+//    NSData *data=[NSData dataWithContentsOfURL:url];
+//    cell.profileImageView.image=[[UIImage alloc] initWithData:data];
+    
+    /*NSURL *url = [NSURL URLWithString:path];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    UIImage *img = [[UIImage alloc] initWithData:data cache:NO];*/
+    //NSURL *url=[NSURL URLWithString:urlImgString]
+    
+    //cell.profileImageView.image=[UIImage imageNamed:@"homero"];
     return cell;
  
 }
@@ -127,7 +147,15 @@
         TweetDetailViewController *tweetDetailViewController = segue.destinationViewController;
         tweetDetailViewController.name= [self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"full_name"];
         tweetDetailViewController.dscTweet = [self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"text"];
-        tweetDetailViewController.profileImage= [UIImage imageNamed:@"homero"];
+        NSString * urlImgString=[self.tweets[senderIndexPath.row] objectForKey:@"img"];
+        
+        if (urlImgString == nil || [urlImgString isEqual:[NSNull null]]){
+            tweetDetailViewController.profileImage=[UIImage imageNamed:@"homero"];
+        }else{
+            tweetDetailViewController.profileImage = [UIImage imageWithData:
+                                           [NSData dataWithContentsOfURL:
+                                            [NSURL URLWithString: [NSString stringWithFormat:@"http://192.168.1.163:3000/%@",urlImgString]]]];
+        }
         tweetDetailViewController.likeByMe=[self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"likeByMe"];
         tweetDetailViewController.idTweet=[self.tweets[senderIndexPath.row] objectForKeyedSubscript:@"idTweet"];
         tweetDetailViewController.delegate = self;
@@ -172,6 +200,9 @@
                 NSNumber *likeByMe= [object objectForKey:@"like_by_me"];
                 NSString *text = [object objectForKey:@"text"];
                 NSDictionary *user = [object objectForKey:@"user"];
+                
+                NSString *urlImg = [[user objectForKey:@"avatar"] objectForKey:@"url"];
+                
                 NSString *firstName=[user objectForKey:@"first_name"];
                 NSString *lastName=[user objectForKey:@"last_name"];
                 NSMutableDictionary *tweet=[[NSMutableDictionary alloc] init];
@@ -179,6 +210,7 @@
                 [tweet setObject:text forKey:@"text"];
                 [tweet setObject:idTweet forKey:@"idTweet"];
                 [tweet setObject:likeByMe forKey:@"likeByMe"];
+                [tweet setObject:urlImg forKey:@"img"];
                 
                 [self.tweets addObject:tweet];
             

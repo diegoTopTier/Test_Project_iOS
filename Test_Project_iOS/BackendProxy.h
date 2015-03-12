@@ -18,6 +18,8 @@ static NSString * const apiBase = @"http://192.168.1.163:3000/api/v1";
 + (void)getTweetsWithCompletion:(void (^)(NSDictionary *json, BOOL success))completion;
 + (void)unlikeTweetWithId:(NSNumber *)Id completion:(void (^)(NSDictionary *json, BOOL success))completion;
 + (void)likeTweetWithId:(NSNumber *)Id completion:(void (^)(NSDictionary *json, BOOL success))completion;
++ (void)getProfileView:(void (^)(NSDictionary *json, BOOL success))completion;
++ (void)postTweet:(NSString *) tweetText completion:(void (^)(NSDictionary *json, BOOL success))completion;
 
 
 @end

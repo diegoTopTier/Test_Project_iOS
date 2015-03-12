@@ -154,8 +154,10 @@
 
 -(void) renewTweets{
     
-
-
+    /*escribo token para pruebas*/
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *token = [defaults objectForKey:@"token"];
+    NSLog(@"token: %@",token);
     
     [BackendProxy getTweetsWithCompletion:^(NSDictionary *json, BOOL success) {
 

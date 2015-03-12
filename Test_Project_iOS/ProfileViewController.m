@@ -61,7 +61,15 @@
             }
             
             self.nameLabel.text=[NSString stringWithFormat:@"%@ %@",[user objectForKey:@"first_name"],[user objectForKey:@"last_name"]];
-            self.profileImage.image=[UIImage imageNamed:@"homero"];
+            NSString * urlImgString=[user objectForKey:@"avatar"];
+            
+            if (urlImgString == nil || [urlImgString isEqual:[NSNull null]]){
+                self.profileImage.image=[UIImage imageNamed:@"homero"];
+            }else{
+                self.profileImage.image = [UIImage imageWithData:
+                                               [NSData dataWithContentsOfURL:
+                                                [NSURL URLWithString: [NSString stringWithFormat:@"http://192.168.1.163:3000/%@",urlImgString]]]];
+            }
             
             }
            [self.tableView reloadData];
@@ -189,10 +197,14 @@
     
     cell.nameLabel.text =  self.nameLabel.text;
     cell.dscTweetLabel.text =  [(self.tweets)[indexPath.row] objectForKey:@"text"];
-    cell.profileImageView.image = [UIImage imageNamed:@"homero"];
+    cell.profileImageView.image = self.profileImage.image;
     
     return cell;
     
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.tweetText endEditing:YES];
 }
 
 
